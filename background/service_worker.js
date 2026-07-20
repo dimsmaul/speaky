@@ -33,6 +33,33 @@ async function getMeetTab() {
   return tab;
 }
 
+// --- Phase 3 (optional): audio pipeline via an offscreen document ---
+
+async function ensureOffscreen() {
+  if (await chrome.offscreen.hasDocument()) return;
+  await chrome.offscreen.createDocument({
+    url: 'offscreen/offscreen.html',
+    reasons: ['USER_MEDIA'],
+    justification: 'Mix Meet tab audio + microphone and run local STT for transcription.',
+  });
+}
+
+async function startAudioPipeline() {
+  const tab = await getMeetTab();
+  if (!tab) return { ok: false, error: 'no_meet_tab' };
+  await ensureOffscreen();
+  // Must target the Meet tab explicitly — a popup message has no sender.tab.
+  const streamId = await chrome.tabCapture.getMediaStreamId({ targetTabId: tab.id });
+  chrome.runtime.sendMessage({ type: 'CONNECT_AUDIO', streamId });
+  return { ok: true };
+}
+
+async function stopAudioPipeline() {
+  chrome.runtime.sendMessage({ type: 'DISCONNECT_AUDIO' });
+  if (await chrome.offscreen.hasDocument()) await chrome.offscreen.closeDocument();
+  return { ok: true };
+}
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   (async () => {
     await ready;
@@ -64,6 +91,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
       case 'HEALTH': {
         setHealth(message.state); // 'stale' | 'ok' from the content script
+        break;
+      }
+
+      case 'START_AUDIO': {
+        const res = await startAudioPipeline();
+        if (res.ok) setHealth('waiting');
+        sendResponse(res);
+        break;
+      }
+
+      case 'STOP_AUDIO': {
+        sendResponse(await stopAudioPipeline());
         break;
       }
 

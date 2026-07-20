@@ -107,6 +107,20 @@ $('reset').onclick = async () => {
   setStatus('Reset — transcript cleared');
 };
 
+// Experimental audio path (Phase 3). Yields no text until the Whisper adapter
+// is wired — see offscreen/whisper-adapter.js.
+$('audio-start').onclick = async () => {
+  const res = await send('START_AUDIO');
+  if (res?.ok) setStatus('Audio pipeline on (experimental — STT not wired yet)');
+  else if (res?.error === 'no_meet_tab') setStatus('Open a Google Meet tab first', true);
+  else setStatus('Could not start audio pipeline', true);
+};
+
+$('audio-stop').onclick = async () => {
+  await send('STOP_AUDIO');
+  setStatus('Audio pipeline stopped');
+};
+
 // --- Live refresh while the popup is open ---
 
 chrome.storage.onChanged.addListener((changes, area) => {

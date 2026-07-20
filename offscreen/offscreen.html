@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <!-- Offscreen document: no UI. Hosts the audio pipeline + local STT
+         because an MV3 service worker cannot use Web Audio / getUserMedia. -->
+    <script type="module" src="offscreen.js"></script>
+  </body>
+</html>

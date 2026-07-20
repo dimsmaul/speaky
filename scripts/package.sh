@@ -11,7 +11,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 # Files/dirs included in every package (besides the generated manifest).
-ASSETS=(pkg background content popup)
+ASSETS=(pkg background content popup offscreen)
 
 # manifest.version must be 1–4 dot-separated integers — browsers reject SemVer
 # prerelease strings like "0.2.0-beta.1". Map beta → a numeric 4th component so
