@@ -1,10 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "Meet Live Transcriber (Rust)",
+  "name": "Speaky",
   "version": "0.1.0",
   "description": "Real-time Google Meet transcription with speaker names via caption scraping. Rust/WASM state engine.",
-  "permissions": ["activeTab", "storage", "tabs", "tabCapture", "offscreen"],
+  "permissions": ["activeTab", "storage", "tabs", "tabCapture", "offscreen", "sidePanel"],
   "host_permissions": ["https://meet.google.com/*"],
+  "icons": {
+    "16": "assets/Speaky-16.png",
+    "48": "assets/Speaky-48.png",
+    "128": "assets/Speaky-128.png"
+  },
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },
@@ -19,6 +24,14 @@
     }
   ],
   "action": {
-    "default_popup": "popup/popup.html"
+    "default_title": "Speaky — open transcript panel",
+    "default_icon": {
+      "16": "assets/Speaky-16.png",
+      "48": "assets/Speaky-48.png",
+      "128": "assets/Speaky-128.png"
+    }
+  },
+  "side_panel": {
+    "default_path": "sidepanel/sidepanel.html"
   }
 }

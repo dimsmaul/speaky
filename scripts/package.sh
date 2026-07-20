@@ -11,7 +11,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 # Files/dirs included in every package (besides the generated manifest).
-ASSETS=(pkg background content popup offscreen)
+ASSETS=(pkg background content sidepanel offscreen assets)
 
 # manifest.version must be 1–4 dot-separated integers — browsers reject SemVer
 # prerelease strings like "0.2.0-beta.1". Map beta → a numeric 4th component so
@@ -36,14 +36,24 @@ assemble() {
   cp -R "${ASSETS[@]}" "$out/"
 
   if [[ "$target" == "firefox" ]]; then
-    # Firefox MV3 does NOT support background.service_worker (chromium-only).
-    # Convert to an event-page background.scripts (module) + add a gecko id.
+    # Firefox MV3 differences from Chromium:
+    #  - no background.service_worker → event-page background.scripts (module)
+    #  - no sidePanel API → use sidebar_action (the caption-only path)
+    #  - no offscreen / tabCapture (Chromium-style) → drop them; the Phase 3
+    #    audio pipeline is Chromium-only, Firefox runs the caption path.
     jq --arg v "$MANIFEST_VERSION" '
       .version = $v
       | .background = { "scripts": ["background/service_worker.js"], "type": "module" }
+      | .permissions = (.permissions - ["sidePanel", "offscreen", "tabCapture"])
+      | del(.side_panel)
+      | .sidebar_action = {
+          "default_panel": "sidepanel/sidepanel.html",
+          "default_title": "Speaky",
+          "default_icon": "assets/Speaky-48.png"
+        }
       | .browser_specific_settings = {
           "gecko": {
-            "id": "meet-transcriber@dimas.local",
+            "id": "speaky@dimas.local",
             "strict_min_version": "128.0"
           }
         }

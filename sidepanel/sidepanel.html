@@ -5,14 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       :root { color-scheme: light dark; }
+      html, body { height: 100%; }
       body {
-        width: 300px;
         margin: 0;
-        padding: 14px;
+        padding: 12px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
         font: 13px/1.4 system-ui, sans-serif;
       }
-      h1 { font-size: 14px; margin: 0 0 10px; }
-      .row { display: flex; gap: 6px; margin-bottom: 8px; }
+      header { display: flex; align-items: center; gap: 8px; }
+      header img { width: 24px; height: 24px; }
+      header h1 { font-size: 15px; margin: 0; }
+      .row { display: flex; gap: 6px; }
       button {
         flex: 1;
         padding: 7px 10px;
@@ -24,29 +30,30 @@
         font: inherit;
       }
       button:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
-      button:disabled { opacity: 0.4; cursor: default; }
       .exports button { font-size: 12px; padding: 5px 6px; }
-      #status { font-size: 12px; opacity: 0.7; margin: 6px 0; }
+      details summary { font-size: 11px; opacity: 0.6; cursor: pointer; }
+      #status { font-size: 12px; opacity: 0.7; }
       #status.warn { color: #d93025; opacity: 1; }
       #preview {
-        height: 150px;
+        flex: 1;
+        min-height: 120px;
         overflow-y: auto;
         border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
         border-radius: 6px;
         padding: 6px 8px;
         font-size: 12px;
       }
-      #preview:empty::before {
-        content: 'No lines yet';
-        opacity: 0.4;
-      }
-      .line { margin-bottom: 4px; }
+      #preview:empty::before { content: 'No lines yet'; opacity: 0.4; }
+      .line { margin-bottom: 5px; }
       .line .spk { font-weight: 600; }
       .line .ts { opacity: 0.5; font-size: 11px; }
     </style>
   </head>
   <body>
-    <h1>Meet Transcriber</h1>
+    <header>
+      <img src="../assets/Speaky-128.png" alt="" />
+      <h1>Speaky</h1>
+    </header>
     <div class="row">
       <button id="start">Start</button>
       <button id="stop">Stop</button>
@@ -58,16 +65,14 @@
       <button id="reset">Reset</button>
     </div>
     <details>
-      <summary style="font-size: 11px; opacity: 0.6; cursor: pointer; margin-bottom: 6px;">
-        Experimental: audio STT (no captions)
-      </summary>
-      <div class="row">
+      <summary>Experimental: audio STT (no captions)</summary>
+      <div class="row" style="margin-top: 6px;">
         <button id="audio-start">Start Audio</button>
         <button id="audio-stop">Stop Audio</button>
       </div>
     </details>
     <div id="status">Idle</div>
     <div id="preview"></div>
-    <script src="popup.js"></script>
+    <script src="sidepanel.js"></script>
   </body>
 </html>

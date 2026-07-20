@@ -1,4 +1,4 @@
-# PRD — Real-Time Meet Transcriber (Chrome/Brave Extension, Rust/WASM)
+# PRD — Speaky: Real-Time Meet Transcriber (Chrome/Brave Extension, Rust/WASM)
 
 A browser extension (Manifest V3) that captures Google Meet conversations in real time, produces a transcript with speaker names (diarization), and saves it as JSON — without any paid STT service costs.
 
@@ -155,7 +155,7 @@ meet-transcriber/
 ```json
 {
   "manifest_version": 3,
-  "name": "Meet Live Transcriber (Rust)",
+  "name": "Speaky",
   "version": "0.1.0",
   "permissions": ["tabCapture", "offscreen", "activeTab", "storage"],
   "host_permissions": ["https://meet.google.com/*"],

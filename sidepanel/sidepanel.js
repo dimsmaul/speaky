@@ -30,7 +30,7 @@ function shortTime(iso) {
 
 function renderPreview(lines) {
   previewEl.replaceChildren();
-  const recent = lines.slice(-40);
+  const recent = lines.slice(-200);
   for (const l of recent) {
     const div = document.createElement('div');
     div.className = 'line';
@@ -121,7 +121,7 @@ $('audio-stop').onclick = async () => {
   setStatus('Audio pipeline stopped');
 };
 
-// --- Live refresh while the popup is open ---
+// --- Live refresh while the side panel is open ---
 
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === 'local' && changes.live_transcript) {

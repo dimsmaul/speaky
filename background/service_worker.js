@@ -2,6 +2,11 @@ import init, { TranscriberManager } from '../pkg/meet_transcriber.js';
 
 let manager;
 
+// Clicking the toolbar icon opens the side panel (the transcript lives there).
+chrome.sidePanel
+  ?.setPanelBehavior({ openPanelOnActionClick: true })
+  .catch(() => {});
+
 // Init WASM + hydrate state from storage (MV3 idle-kill recovery, FEASIBILITY N5).
 const ready = (async () => {
   await init();

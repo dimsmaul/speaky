@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in improving Meet Live Transcriber. This guide covers setup, the commit convention (which drives automatic versioning), and how changes get released.
+Thanks for your interest in improving Speaky. This guide covers setup, the commit convention (which drives automatic versioning), and how changes get released.
 
 ## Prerequisites
 
